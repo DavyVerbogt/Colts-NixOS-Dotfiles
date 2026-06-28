@@ -39,10 +39,10 @@
             src = ohitstom + /noControls;
             name = "noControls.js";
           }
-          {
-            src = ohitstom + /pixelatedImages;
-            name = "pixelatedImages.js";
-          }
+          #{
+          #src = ohitstom + /pixelatedImages;
+          #name = "pixelatedImages.js";
+          #}
         ];
       };
     };
