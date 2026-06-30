@@ -2,16 +2,18 @@
 
   flake.nixosModules.ws01-nixConfig = { config, pkgs, ... }: {
 
-    imports = [
-      self.nixosModules.ws01-nixHardware
-      self.nixosModules.niridesktop
-      self.nixosModules.dev
-      self.nixosModules.steam
-      self.nixosModules.minecraft
-      self.nixosModules.nvidia
-      self.nixosModules.spicetify
-      self.nixosModules.vesktop
-      self.nixosModules.zen
+    imports = with self.nixosModules; [
+      ws01-nixHardware
+      niridesktop
+      dev
+      steam
+      minecraft
+      nvidia
+      spicetify
+      vesktop
+      zen
+      nexus
+      psx
       inputs.qylock.nixosModules.default
     ];
 
@@ -116,17 +118,15 @@
 
     programs.qylock = {
       enable = true;
-      theme = "nier-automata"; # fallback only, overridden by the service below
+      theme = "nier-automata";
     };
 
     systemd.services.sddm-random-theme = {
-      description = "Randomly select qylock SDDM theme";
       before = [ "display-manager.service" ];
       wantedBy = [ "display-manager.service" ];
       serviceConfig.Type = "oneshot";
       script = ''
-        themes =
-        (
+        themes=(
           pixel-coffee
           pixel-dusk-city
           pixel-night-city
@@ -138,14 +138,13 @@
           reverse-1999
           terraria
         )
-          selected=''${themes[$RANDOM % ''${#themes[@]}]}
-          mkdir -p /etc/sddm.conf.d
-          printf '[Theme]\nCurrent=%s\n' "$selected" > /etc/sddm.conf.d/random-theme.conf
+        selected=''${themes[$RANDOM % ''${#themes[@]}]}
+        mkdir -p /etc/sddm.conf.d
+        printf '[Theme]\nCurrent=%s\n' "$selected" > /etc/sddm.conf.d/random-theme.conf
       '';
     };
 
     programs = {
-      # remove regreet.enable = true
       firefox.enable = true;
       fish.enable = true;
       direnv.enableFishIntegration = true;

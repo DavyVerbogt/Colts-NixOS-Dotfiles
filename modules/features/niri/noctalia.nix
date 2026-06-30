@@ -1,4 +1,4 @@
-{ self, inputs, ... }: {
+{ inputs, ... }: {
 
   perSystem = { pkgs, ... }: {
 
@@ -6,9 +6,6 @@
       let
         jsonSettings = (builtins.fromJSON (builtins.readFile ./noctalia.json)).settings;
 
-        # Switches between Sweet and Sweet-Dark whenever Noctalia toggles dark mode.
-        # Noctalia fires this hook after syncGsettings has already updated color-scheme,
-        # so we just read that value and set the matching GTK theme name.
         sweetThemeSwitch = pkgs.writeShellScript "sweet-theme-switch" ''
           current=$(${pkgs.glib}/bin/gsettings get org.gnome.desktop.interface color-scheme)
           if [ "$current" = "'prefer-dark'" ]; then
@@ -20,8 +17,6 @@
       in
       inputs.wrapper-modules.wrappers.noctalia-shell.wrap {
         inherit pkgs;
-        # Merge the JSON settings with the hook — the hook path is a nix store path
-        # so it can't live in the static JSON file.
         settings = jsonSettings // {
           hooks = (jsonSettings.hooks or { }) // {
             enabled = true;
@@ -30,4 +25,34 @@
         };
       };
   };
+
+  flake.nixosModules.noctalia =
+    { pkgs, ... }:
+    let
+      lockCmd = "qs -c noctalia-shell ipc call lockScreen lock";
+      suspendCmd = "qs -c noctalia-shell ipc call sessionMenu lockAndSuspend";
+
+      idleScript = pkgs.writeShellScript "swayidle-start" ''
+        exec ${pkgs.swayidle}/bin/swayidle -w \
+          timeout 240 'niri msg action power-off-monitors' \
+          timeout 300 '${lockCmd}' \
+          timeout 600 '${suspendCmd}' \
+          before-sleep '${lockCmd}'
+      '';
+    in
+    {
+      environment.systemPackages = [ pkgs.swayidle ];
+
+      systemd.user.services.swayidle = {
+        description = "Idle manager for Wayland";
+        wantedBy = [ "graphical-session.target" ];
+        partOf = [ "graphical-session.target" ];
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${idleScript}";
+          Environment = "PATH=/run/current-system/sw/bin:/run/wrappers/bin";
+          Restart = "on-failure";
+        };
+      };
+    };
 }

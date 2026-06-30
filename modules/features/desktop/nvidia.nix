@@ -1,4 +1,4 @@
-{ self, inputs, ... }: {
+{ ... }: {
   flake.nixosModules.nvidia = { config, pkgs, ... }: {
     hardware.graphics = {
       enable = true;

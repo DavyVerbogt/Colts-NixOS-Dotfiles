@@ -1,4 +1,4 @@
-{ self, inputs, ... }:
+{ inputs, ... }:
 
 {
   flake.nixosModules.steam =
@@ -19,6 +19,9 @@
         remotePlay.openFirewall = true;
         dedicatedServer.openFirewall = true;
         gamescopeSession.enable = false;
+        extraCompatPackages = with pkgs; [
+          proton-ge-bin
+        ];
       };
 
       # Gamemode for performance optimization
@@ -63,6 +66,60 @@
 
         # Performance monitoring
         nvtopPackages.full
+
+        mangohud
       ];
+      environment.etc."MangoHud/MangoHud.conf".text = ''
+        legacy_layout = false
+        position = top-left
+        width = 270
+
+        # --- Display elements ---
+        fps
+        frametime
+        frame_timing = 1
+        gpu_stats
+        gpu_temp
+        gpu_mem_temp
+        gpu_core_clock
+        gpu_mem_clock
+        vram
+        cpu_stats
+        cpu_temp
+        cpu_power
+        gpu_power
+        ram
+
+        # --- Font ---
+        font_size = 24
+        no_small_font = false
+
+        # --- Cyberpunk color palette ---
+        background_color = 0d0d1a
+        text_color       = dde4ff
+
+        fps_color_above_warn = 39ff14   # neon green  — good
+        fps_color_warn       = ff9500   # amber       — warn
+        fps_color            = ff3030   # red         — bad
+
+        gpu_color       = 00e5ff   # cyan
+        cpu_color       = ff2d55   # hot pink
+        vram_color      = bf5fff   # purple
+        ram_color       = 5b8af5   # electric blue
+        frametime_color = 00bfa5   # teal
+        engine_color    = 00e5ff   # cyan
+        wine_color      = ff7043   # orange (for Proton games)
+
+        # --- Style ---
+        background_alpha = 0.85
+        round_corners    = 8
+        table_columns    = 3
+
+        # --- Toggles ---
+        toggle_hud       = Shift_R+F12
+        toggle_fps_limit = Shift_L+F1
+      '';
+
+      environment.sessionVariables.MANGOHUD_CONFIGFILE = "/etc/MangoHud/MangoHud.conf";
     };
 }
