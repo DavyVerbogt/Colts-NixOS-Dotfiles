@@ -1,0 +1,21 @@
+[0;1;32m●[0m greetd.service
+     Loaded: loaded (]8;;file://nixos/etc/systemd/system/greetd.service\/etc/systemd/system/greetd.service]8;;\; [0;1;32menabled[0m; preset: ignored)
+     Active: [0;1;32mactive (running)[0m since Sun 2026-06-28 14:54:27 CEST; 41min ago
+ Invocation: dcf1caaa68a04862919fcfc26cf237c4
+   Main PID: 2435 (greetd)
+         IP: 0B in, 0B out
+         IO: 0B read, 0B written
+      Tasks: 1[0;38:5:245m (limit: 38341)[0m
+     Memory: 2.5M (peak: 21.9M)
+        CPU: 127ms
+     CGroup: /system.slice/greetd.service
+             └─[0;38:5:245m2435 /nix/store/5wpl6l86y4w7bdsc5s30qp7mpj4x6b03-greetd-0.10.3/bin/greetd --config /nix/store/xhk0976cnsjcwpvkdbw672i0hfs9aw4p-greetd.toml[0m
+
+jun 28 14:54:27 nixos systemd[1]: greetd.service: Scheduled restart job, restart counter is at 1.
+jun 28 14:54:27 nixos systemd[1]: Started greetd.service.
+jun 28 14:54:27 nixos greetd[2443]: pam_unix(greetd:session): session opened for user greeter(uid=991) by (uid=0)
+jun 28 14:54:27 nixos greetd[2443]: gkr-pam: gnome-keyring-daemon started properly
+jun 28 14:55:19 nixos greetd[6688]: [0;1;31m[0;1;39m[0;1;31mgkr-pam: unable to locate daemon control file[0m
+jun 28 14:55:19 nixos greetd[6688]: gkr-pam: stashed password to try later in open session
+jun 28 14:55:19 nixos greetd[6688]: pam_unix(greetd:session): session opened for user colt(uid=1000) by (uid=0)
+jun 28 14:55:20 nixos greetd[6688]: gkr-pam: gnome-keyring-daemon started properly and unlocked keyring

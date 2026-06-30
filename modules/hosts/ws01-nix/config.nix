@@ -84,7 +84,6 @@
     };
 
     services = {
-      greetd.enable = true;
       printing.enable = true;
       pulseaudio.enable = false;
       pipewire = {
@@ -126,13 +125,22 @@
       wantedBy = [ "display-manager.service" ];
       serviceConfig.Type = "oneshot";
       script = ''
-            themes=(
+        themes =
+        (
           pixel-coffee
-
+          pixel-dusk-city
+          pixel-night-city
+          pixel-skyscrapers
+          pixel-waterfall
+          honkai-star-rail
+          minecraft
+          nier-automata
+          reverse-1999
+          terraria
         )
-            selected=''${themes[$RANDOM % ''${#themes[@]}]}
-            mkdir -p /etc/sddm.conf.d
-            printf '[Theme]\nCurrent=%s\n' "$selected" > /etc/sddm.conf.d/random-theme.conf
+          selected=''${themes[$RANDOM % ''${#themes[@]}]}
+          mkdir -p /etc/sddm.conf.d
+          printf '[Theme]\nCurrent=%s\n' "$selected" > /etc/sddm.conf.d/random-theme.conf
       '';
     };
 
@@ -146,12 +154,3 @@
     system.stateVersion = "26.05";
   };
 }
-#  pixel-dusk-city
-#  pixel-night-city
-#  pixel-skyscrapers
-#  pixel-waterfall
-#  honkai-star-rail
-#  minecraft
-#  nier-automata
-#  reverse-1999
-#  terraria
