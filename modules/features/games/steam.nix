@@ -1,5 +1,4 @@
 { inputs, ... }:
-
 {
   flake.nixosModules.steam =
     {
@@ -7,6 +6,16 @@
       lib,
       ...
     }:
+    let
+      nexusModsApp = pkgs.appimageTools.wrapType2 {
+        pname = "nexusmods-app";
+        version = "0.10.0";
+        src = pkgs.fetchurl {
+          url = "https://github.com/Nexus-Mods/NexusMods.App/releases/latest/download/nexusmods-app.AppImage";
+          sha256 = pkgs.lib.fakeHash;
+        };
+      };
+    in
     {
       nixpkgs.overlays = [
         inputs.millennium.overlays.default
@@ -50,25 +59,43 @@
       hardware.graphics.enable32Bit = true;
 
       # Gaming packages
-      environment.systemPackages = with pkgs; [
-        # Launchers
-        faugus-launcher
+      environment.systemPackages =
+        [
+          nexusModsApp
+          (pkgs.makeDesktopItem {
+            name = "nexusmods-app";
+            desktopName = "Nexus Mods App";
+            exec = "${nexusModsApp}/bin/nexusmods-app %u";
+            icon = "nexusmods-app";
+            categories = [ "Game" ];
+            mimeTypes = [ "x-scheme-handler/nxm" ];
+          })
+        ]
+        ++ (with pkgs; [
+          # Launchers
+          faugus-launcher
 
-        # Proton/Wine
-        protonup-qt
-        winetricks
+          # Proton/Wine
+          protonup-qt
+          winetricks
 
-        # Tools
-        gamemode
+          # Tools
+          gamemode
 
-        # Controllers
-        sc-controller
+          # Controllers
+          sc-controller
 
-        # Performance monitoring
-        nvtopPackages.full
+          # Performance monitoring
+          nvtopPackages.full
 
-        mangohud
-      ];
+          mangohud
+        ]);
+
+      environment.etc."xdg/mimeapps.list".text = ''
+        [Default Applications]
+        x-scheme-handler/nxm=nexusmods-app.desktop
+      '';
+
       environment.etc."MangoHud/MangoHud.conf".text = ''
         legacy_layout = false
         position = top-left
