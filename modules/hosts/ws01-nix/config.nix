@@ -12,8 +12,7 @@
       spicetify
       vesktop
       zen
-      nexus
-      psx
+      amm
       inputs.qylock.nixosModules.default
     ];
 
