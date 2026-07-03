@@ -1,28 +1,24 @@
 { config, lib, ... }: {
-  flake.nixosModules.cursor =
+
+  options.desktop = {
+    cursorTheme = lib.mkOption {
+      type = lib.types.str;
+      default = "Banana";
+      description = "XCursor theme name.";
+    };
+    cursorSize = lib.mkOption {
+      type = lib.types.int;
+      default = 24;
+      description = "XCursor size.";
+    };
+  };
+
+  config.flake.nixosModules.cursor =
     { pkgs, lib, ... }:
     let
       inherit (config.desktop) cursorTheme cursorSize;
     in
     {
-      # Cursor theme. Owns the package, the XCURSOR_* environment (including
-      # XCURSOR_PATH — required for XWayland/Qt/Electron clients like Steam,
-      # Spicetify, and Claude Desktop to actually find a Nix-store-installed
-      # cursor theme; without it they silently fall back to the stock arrow),
-      # and the /etc fallback theme that non-Wayland-native toolkits read.
-      options.desktop = {
-        cursorTheme = lib.mkOption {
-          type = lib.types.str;
-          default = "Banana";
-          description = "XCursor theme name.";
-        };
-        cursorSize = lib.mkOption {
-          type = lib.types.int;
-          default = 24;
-          description = "XCursor size.";
-        };
-      };
-
       environment.systemPackages = [ pkgs.banana-cursor ];
 
       # XCURSOR_THEME/SIZE are unconditional (not just Nvidia-gated) — every

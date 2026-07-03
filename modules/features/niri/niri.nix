@@ -1,4 +1,10 @@
-{ self, inputs, config, ... }: {
+{
+  self,
+  inputs,
+  config,
+  ...
+}:
+{
 
   flake.nixosModules.niri =
     {
@@ -17,10 +23,6 @@
           pkgs.banana-cursor
           inputs.niri-session-manager.packages.${pkgs.stdenv.hostPlatform.system}.default
         ];
-        # Nvidia-only vars. XCURSOR_THEME/SIZE/PATH are owned by
-        # desktop/cursor.nix (imported alongside this module in
-        # niridesktop.nix) since every Xcursor/wayland-cursor client needs
-        # them, not just niri itself.
         sessionVariables = lib.mkIf config.hardware.nvidia.modesetting.enable {
           GBM_BACKEND = "nvidia-drm";
           __GLX_VENDOR_LIBRARY_NAME = "nvidia";
