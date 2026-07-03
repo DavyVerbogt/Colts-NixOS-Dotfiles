@@ -10,6 +10,7 @@
       self.nixosModules.kitty
       self.nixosModules.media
       self.nixosModules.niri
+      self.nixosModules.portals
       self.nixosModules.screenshot
       self.nixosModules.thunar
     ];

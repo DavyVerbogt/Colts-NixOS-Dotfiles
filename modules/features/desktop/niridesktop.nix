@@ -4,6 +4,7 @@
       self.nixosModules.archive
       self.nixosModules.clipboard
       self.nixosModules.cursor
+      self.nixosModules.dconfCursor
       self.nixosModules.gtkSettings
       self.nixosModules.gtkTheme
       self.nixosModules.iconTheme

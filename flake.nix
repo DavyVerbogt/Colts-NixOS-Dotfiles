@@ -10,7 +10,10 @@
     millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
     nix-claude-code.url = "github:ryoppippi/nix-claude-code";
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
-    claude-desktop.url = "github:k3d3/claude-desktop-linux-flake";
+    claude-desktop = {
+      url = "github:patrickjaja/claude-desktop-bin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     zen-browser.url = "github:youwen5/zen-browser-flake";
     niri-session-manager.url = "github:MTeaHead/niri-session-manager";
     nirimation = {
