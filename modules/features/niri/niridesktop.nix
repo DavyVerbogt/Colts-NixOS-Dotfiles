@@ -4,11 +4,13 @@
       self.nixosModules.archive
       self.nixosModules.clipboard
       self.nixosModules.cursor
+      self.nixosModules.dconfDefaults
       self.nixosModules.gtkSettings
       self.nixosModules.gtkTheme
       self.nixosModules.iconTheme
       self.nixosModules.kitty
       self.nixosModules.media
+      self.nixosModules.mimeDefaults
       self.nixosModules.niri
       self.nixosModules.portals
       self.nixosModules.screenshot
