@@ -16,7 +16,7 @@
 
       programs.spicetify = {
         enable = true;
-        theme = spicePkgs.themes.text;
+        theme = spicePkgs.themes.comfy;
 
         enabledExtensions = with spicePkgs.extensions; [
           adblock

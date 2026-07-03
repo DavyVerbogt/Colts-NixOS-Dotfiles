@@ -3,7 +3,10 @@
   # GTK theming feature: Sweet theme, candy-icons, cursor defaults, and the
   # XDG portal needed for gsettings-based dark/light switching on Wayland.
   flake.nixosModules.gtk = { pkgs, ... }: {
-
+    environment.sessionVariables = {
+      XCURSOR_THEME = "Banana";
+      XCURSOR_SIZE = "24";
+    };
     # Generates icon cache files for all installed icon themes.
     # Without this candy-icons won't be found by GTK apps or Thunar.
     gtk.iconCache.enable = true;
@@ -14,11 +17,21 @@
     xdg.portal = {
       enable = true;
       extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      config.common = {
+        default = [
+          "gnome"
+          "gtk"
+        ];
+        "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+        "org.freedesktop.impl.portal.Access" = [ "gtk" ];
+        "org.freedesktop.impl.portal.Notification" = [ "gtk" ];
+        "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+      };
     };
 
     # gtk.nix owns all GTK settings.ini files — both theme and cursor —
     # to avoid conflicts with niri.nix defining the same etc paths.
-    environment.etc."gtk-3.0/settings.ini".text = ''
+    environment.etc."xdg/gtk-3.0/settings.ini".text = ''
       [Settings]
       gtk-theme-name=Sweet-Dark
       gtk-icon-theme-name=candy-icons
@@ -27,7 +40,7 @@
       gtk-application-prefer-dark-theme=1
     '';
 
-    environment.etc."gtk-4.0/settings.ini".text = ''
+    environment.etc."xdg/gtk-4.0/settings.ini".text = ''
       [Settings]
       gtk-theme-name=Sweet-Dark
       gtk-icon-theme-name=candy-icons

@@ -29,16 +29,6 @@
       "widgets": {
         "left": [
           {
-            "colorizeSystemIcon": "none",
-            "colorizeSystemText": "none",
-            "customIconPath": "",
-            "enableColorization": false,
-            "icon": "rocket",
-            "iconColor": "none",
-            "id": "Launcher",
-            "useDistroLogo": false
-          },
-          {
             "clockColor": "none",
             "customFont": "",
             "formatHorizontal": "HH:mm ddd, MMM dd",
@@ -70,6 +60,13 @@
             "usePadding": false
           },
           {
+            "defaultSettings": {
+              "precision": 8,
+              "showBarValue": true
+            },
+            "id": "plugin:noctalia-calculator"
+          },
+          {
             "colorizeIcons": false,
             "hideMode": "hidden",
             "id": "ActiveWindow",
@@ -95,9 +92,27 @@
             "textColor": "none",
             "useFixedWidth": false,
             "visualizerType": "linear"
+          },
+          {
+            "defaultSettings": {
+              "displayIndex": 1,
+              "enabled": false,
+              "vibranceValue": 512
+            },
+            "id": "plugin:nvibrant"
           }
         ],
         "center": [
+          {
+            "colorizeDistroLogo": false,
+            "colorizeSystemIcon": "primary",
+            "colorizeSystemText": "none",
+            "customIconPath": "",
+            "enableColorization": true,
+            "icon": "noctalia",
+            "id": "ControlCenter",
+            "useDistroLogo": true
+          },
           {
             "characterCount": 2,
             "colorizeIcons": false,
@@ -139,13 +154,41 @@
             "unreadBadgeColor": "primary"
           },
           {
-            "deviceNativePath": "__default__",
-            "displayMode": "graphic-clean",
-            "hideIfIdle": false,
-            "hideIfNotDetected": true,
-            "id": "Battery",
-            "showNoctaliaPerformance": false,
-            "showPowerProfiles": false
+            "defaultSettings": {
+              "attachmentStyle": "connected",
+              "claude": {
+                "additionalDirs": [],
+                "allowedTools": [],
+                "appendSystemPrompt": "",
+                "autoResume": true,
+                "binary": "claude",
+                "dangerouslySkipPermissions": false,
+                "disallowedTools": [],
+                "fallbackModel": "",
+                "includePartialMessages": true,
+                "injectNoctaliaContext": true,
+                "maxTurns": 0,
+                "mcpConfigPath": "",
+                "model": "",
+                "permissionMode": "default",
+                "requireConfirmBypass": true,
+                "sessionId": "",
+                "strictMcpConfig": false,
+                "workingDir": ""
+              },
+              "maxHistoryLength": 200,
+              "panelDetached": true,
+              "panelHeightRatio": 0.9,
+              "panelPosition": "right",
+              "panelWidth": 620,
+              "scale": 1
+            },
+            "id": "plugin:claude-code-panel",
+            "panel": {
+              "defaultHeightRatio": 0.9,
+              "defaultPosition": "right",
+              "detached": true
+            }
           },
           {
             "displayMode": "onhover",
@@ -155,21 +198,18 @@
             "textColor": "none"
           },
           {
-            "applyToAllMonitors": false,
             "displayMode": "onhover",
             "iconColor": "none",
-            "id": "Brightness",
+            "id": "Microphone",
+            "middleClickCommand": "pwvucontrol || pavucontrol",
             "textColor": "none"
           },
           {
-            "colorizeDistroLogo": false,
-            "colorizeSystemIcon": "none",
-            "colorizeSystemText": "none",
-            "customIconPath": "",
-            "enableColorization": false,
-            "icon": "noctalia",
-            "id": "ControlCenter",
-            "useDistroLogo": false
+            "defaultSettings": {
+              "delay": 20,
+              "iconColor": "mPrimary"
+            },
+            "id": "plugin:coin-flip"
           }
         ]
       },
@@ -189,19 +229,19 @@
       "dimmerOpacity": 0.2,
       "showScreenCorners": false,
       "forceBlackScreenCorners": false,
-      "scaleRatio": 1,
-      "radiusRatio": 1,
-      "iRadiusRatio": 1,
+      "scaleRatio": 0.9,
+      "radiusRatio": 0.3,
+      "iRadiusRatio": 0.35000000000000003,
       "boxRadiusRatio": 1,
       "screenRadiusRatio": 1,
       "animationSpeed": 1,
       "animationDisabled": false,
       "compactLockScreen": false,
-      "lockScreenAnimations": false,
+      "lockScreenAnimations": true,
       "lockOnSuspend": true,
       "showSessionButtonsOnLockScreen": true,
       "showHibernateOnLockScreen": false,
-      "enableLockScreenMediaControls": false,
+      "enableLockScreenMediaControls": true,
       "enableShadows": true,
       "enableBlurBehind": true,
       "shadowDirection": "bottom_right",
@@ -215,12 +255,12 @@
       "lockScreenCountdownDuration": 10000,
       "autoStartAuth": false,
       "allowPasswordWithFprintd": false,
-      "clockStyle": "custom",
+      "clockStyle": "digital",
       "clockFormat": "hh\\nmm",
-      "passwordChars": false,
+      "passwordChars": true,
       "lockScreenMonitors": [],
-      "lockScreenBlur": 0,
-      "lockScreenTint": 0,
+      "lockScreenBlur": 0.24,
+      "lockScreenTint": 0.24,
       "keybinds": {
         "keyUp": [
           "Up"
@@ -249,9 +289,9 @@
       "smoothScrollEnabled": true
     },
     "ui": {
-      "fontDefault": "Noto Sans Mono",
-      "fontFixed": "Noto Sans Mono",
-      "fontDefaultScale": 1,
+      "fontDefault": "Liberation Mono",
+      "fontFixed": "Liberation Mono",
+      "fontDefaultScale": 1.02,
       "fontFixedScale": 1,
       "tooltipsEnabled": true,
       "scrollbarAlwaysVisible": false,
@@ -342,7 +382,7 @@
       "favorites": []
     },
     "appLauncher": {
-      "enableClipboardHistory": false,
+      "enableClipboardHistory": true,
       "autoPasteClipboard": false,
       "enableClipPreview": true,
       "clipboardWrapText": true,
@@ -470,7 +510,7 @@
       "showLauncherIcon": true,
       "launcherPosition": "end",
       "launcherUseDistroLogo": false,
-      "launcherIcon": "",
+      "launcherIcon": "apps",
       "launcherIconColor": "none",
       "pinnedStatic": false,
       "inactiveIndicators": true,
@@ -590,7 +630,7 @@
         "lowSoundFile": "",
         "excludedApps": "discord,firefox,chrome,chromium,edge"
       },
-      "enableMediaToast": false,
+      "enableMediaToast": true,
       "enableKeyboardLayoutToast": true,
       "enableBatteryToast": true
     },
@@ -636,7 +676,52 @@
       "syncGsettings": true
     },
     "templates": {
-      "activeTemplates": [],
+      "activeTemplates": [
+        {
+          "enabled": true,
+          "id": "kitty"
+        },
+        {
+          "enabled": true,
+          "id": "discord"
+        },
+        {
+          "enabled": true,
+          "id": "gtk"
+        },
+        {
+          "enabled": true,
+          "id": "btop"
+        },
+        {
+          "enabled": true,
+          "id": "kcolorscheme"
+        },
+        {
+          "enabled": true,
+          "id": "mango"
+        },
+        {
+          "enabled": true,
+          "id": "niri"
+        },
+        {
+          "enabled": true,
+          "id": "spicetify"
+        },
+        {
+          "enabled": true,
+          "id": "steam"
+        },
+        {
+          "enabled": true,
+          "id": "code"
+        },
+        {
+          "enabled": true,
+          "id": "zenBrowser"
+        }
+      ],
       "enableUserTheming": false
     },
     "nightLight": {
@@ -651,7 +736,7 @@
     "hooks": {
       "enabled": true,
       "wallpaperChange": "",
-      "darkModeChange": "",
+      "darkModeChange": "/nix/store/hh1z99hcn9pda2jikwi26cqysfhywmwi-sweet-theme-switch",
       "screenLock": "",
       "screenUnlock": "",
       "performanceModeEnabled": "",
@@ -665,9 +750,9 @@
       "notifyUpdates": true
     },
     "idle": {
-      "enabled": false,
-      "screenOffTimeout": 600,
-      "lockTimeout": 660,
+      "enabled": true,
+      "screenOffTimeout": 120,
+      "lockTimeout": 400,
       "suspendTimeout": 1800,
       "fadeDuration": 5,
       "screenOffCommand": "",
@@ -701,6 +786,50 @@
               "y": 16
             }
           ]
+        },
+        {
+          "name": "DP-2",
+          "widgets": [
+            {
+              "colorName": "primary",
+              "height": 72,
+              "hideWhenIdle": true,
+              "id": "AudioVisualizer",
+              "roundedCorners": true,
+              "scale": 2.0625,
+              "showBackground": true,
+              "visualizerType": "wave",
+              "width": 320,
+              "x": 56,
+              "y": 903
+            },
+            {
+              "hideMode": "idle",
+              "id": "MediaPlayer",
+              "roundedCorners": true,
+              "scale": 1,
+              "showAlbumArt": true,
+              "showBackground": false,
+              "showButtons": true,
+              "showVisualizer": false,
+              "visualizerType": "linear",
+              "x": 176,
+              "y": 937
+            },
+            {
+              "clockColor": "none",
+              "clockStyle": "digital",
+              "customFont": "",
+              "format": "HH:mm\\nd MMMM yyyys s s s s s",
+              "id": "Clock",
+              "roundedCorners": true,
+              "scale": 1,
+              "showBackground": true,
+              "useCustomFont": false,
+              "x": 57,
+              "y": 20
+            }
+          ]
         }
       ]
     }
@@ -712,28 +841,28 @@
     "openedPanel": "",
     "lockScreenActive": false,
     "wallpapers": {
-      "winit": "/home/colt/Documents/NixOS/wallpaper/YPzwHAO.jpeg"
+      "DP-2": "/home/colt/Documents/NixOS/wallpaper/street_workshop.jpg"
     },
     "desktopWidgetsEditMode": false,
     "display": {
-      "winit": {
-        "name": "winit",
+      "DP-2": {
+        "name": "DP-2",
         "connected": true,
         "scale": 1,
-        "width": 1280,
-        "height": 800,
+        "width": 3840,
+        "height": 1080,
         "x": 0,
         "y": 0,
-        "physical_width": 0,
-        "physical_height": 0,
-        "refresh_rate": 60000,
-        "vrr_supported": false,
+        "physical_width": 1190,
+        "physical_height": 340,
+        "refresh_rate": 119974,
+        "vrr_supported": true,
         "vrr_enabled": false,
-        "transform": "Flipped180"
+        "transform": "Normal"
       }
     },
     "notificationsState": {
-      "lastSeenTs": 0
+      "lastSeenTs": 1782938729000
     },
     "changelogState": {
       "lastSeenVersion": "v4.7.7"

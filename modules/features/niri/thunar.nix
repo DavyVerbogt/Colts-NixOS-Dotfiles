@@ -13,5 +13,9 @@
     programs.xfconf.enable = true; # persist Thunar preferences across launches
     services.gvfs.enable = true; # trash, network shares, MTP devices
     services.tumbler.enable = true; # thumbnail generation for images/video
+    environment.etc."xdg/mimeapps.list".text = ''
+      [Default Applications]
+      inode/directory=thunar.desktop
+    '';
   };
 }
