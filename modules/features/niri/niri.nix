@@ -1,4 +1,4 @@
-{ self, inputs, ... }: {
+{ self, inputs, config, ... }: {
 
   flake.nixosModules.niri =
     {
@@ -17,24 +17,21 @@
           pkgs.banana-cursor
           inputs.niri-session-manager.packages.${pkgs.stdenv.hostPlatform.system}.default
         ];
-        # XCURSOR vars must be set unconditionally — not just on Nvidia.
-        # lib.mkMerge lets us add the Nvidia-only vars cleanly alongside them.
-        sessionVariables = lib.mkMerge [
-          {
-            XCURSOR_THEME = "Banana";
-            XCURSOR_SIZE = "24";
-          }
-          (lib.mkIf config.hardware.nvidia.modesetting.enable {
-            GBM_BACKEND = "nvidia-drm";
-            __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-            LIBVA_DRIVER_NAME = "nvidia";
-            __GL_GSYNC_ALLOWED = "1";
-            __GL_VRR_ALLOWED = "1";
-          })
-        ];
+        # Nvidia-only vars. XCURSOR_THEME/SIZE/PATH are owned by
+        # desktop/cursor.nix (imported alongside this module in
+        # niridesktop.nix) since every Xcursor/wayland-cursor client needs
+        # them, not just niri itself.
+        sessionVariables = lib.mkIf config.hardware.nvidia.modesetting.enable {
+          GBM_BACKEND = "nvidia-drm";
+          __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+          LIBVA_DRIVER_NAME = "nvidia";
+          __GL_GSYNC_ALLOWED = "1";
+          __GL_VRR_ALLOWED = "1";
+        };
       };
       # gtk-3.0/settings.ini, gtk-4.0/settings.ini, and icons/default/index.theme
-      # are all owned by gtk.nix to avoid module conflicts.
+      # are all owned by desktop/gtk-settings.nix and desktop/cursor.nix to
+      # avoid module conflicts.
     };
   perSystem =
     {
@@ -227,9 +224,12 @@
             "Mod+Shift+Page_Up".move-window-to-workspace-up = { };
           };
 
+          # Cursor theme/size now sourced from desktop/cursor.nix's options
+          # instead of a second hardcoded "Banana"/24 — keeps the compositor's
+          # own cursor rendering in sync with everything else automatically.
           cursor = {
-            xcursor-theme = "Banana";
-            xcursor-size = 24;
+            xcursor-theme = config.desktop.cursorTheme;
+            xcursor-size = config.desktop.cursorSize;
           };
         };
       };

@@ -13,7 +13,7 @@
       vesktop
       zen
       amm
-      inputs.qylock.nixosModules.default
+      inputs.qylock.nixosModules.defaults
     ];
 
     nix.settings.experimental-features = [
