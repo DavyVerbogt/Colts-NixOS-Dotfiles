@@ -1,5 +1,10 @@
 { config, lib, ... }: {
 
+  # Cursor theme. Owns the package, the XCURSOR_* environment (including
+  # XCURSOR_PATH — required for XWayland/Qt/Electron clients like Steam,
+  # Spicetify, and Claude Desktop to actually find a Nix-store-installed
+  # cursor theme; without it they silently fall back to the stock arrow),
+  # and the /etc fallback theme that non-Wayland-native toolkits read.
   options.desktop = {
     cursorTheme = lib.mkOption {
       type = lib.types.str;
@@ -27,7 +32,7 @@
       environment.sessionVariables = {
         XCURSOR_THEME = cursorTheme;
         XCURSOR_SIZE = toString cursorSize;
-        XCURSOR_PATH = lib.concatStringsSep ":" [
+        XCURSOR_PATH = [
           "${pkgs.banana-cursor}/share/icons"
           "/run/current-system/sw/share/icons"
           "/etc/profiles/per-user/colt/share/icons"

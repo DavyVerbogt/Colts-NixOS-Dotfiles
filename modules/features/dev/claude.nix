@@ -1,11 +1,23 @@
 { self, inputs, ... }: {
 
-  # Claude Desktop for Linux (k3d3/claude-desktop-linux-flake).
-  # Uses the FHS-wrapped variant so MCP servers (npx, uvx, docker) work correctly.
-  # Imported in hosts/ws01-nix/config.nix as: self.nixosModules.claude
-  flake.nixosModules.claude = { pkgs, ... }: {
-    environment.systemPackages = [
-      inputs.claude-desktop.packages.${pkgs.stdenv.hostPlatform.system}.claude-desktop-with-fhs
-    ];
-  };
+  flake.nixosModules.claude =
+    { pkgs, ... }:
+    let
+      claudeDesktop =
+        inputs.claude-desktop.packages.${pkgs.stdenv.hostPlatform.system}.claude-desktop-with-fhs;
+    in
+    {
+      environment.systemPackages = [
+        (pkgs.symlinkJoin {
+          name = "claude-desktop-wrapped";
+          paths = [ claudeDesktop ];
+          nativeBuildInputs = [ pkgs.makeWrapper ];
+          postBuild = ''
+            for bin in $out/bin/*; do
+              wrapProgram "$bin" --set ELECTRON_OZONE_PLATFORM_HINT wayland
+            done
+          '';
+        })
+      ];
+    };
 }
