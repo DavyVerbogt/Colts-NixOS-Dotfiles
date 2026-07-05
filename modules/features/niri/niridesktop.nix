@@ -15,7 +15,7 @@
       self.nixosModules.portals
       self.nixosModules.screenshot
       self.nixosModules.thunar
-      self.nixosModules.font
+      self.nixosModules.fonts
     ];
   };
 }
