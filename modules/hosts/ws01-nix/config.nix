@@ -13,6 +13,7 @@
       vesktop
       zen
       amm
+      bazecor
       inputs.qylock.nixosModules.default
     ];
 

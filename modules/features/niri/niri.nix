@@ -204,8 +204,8 @@
               "${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
             "XF86AudioMute".spawn-sh = "${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
 
-            "Print".screenshot = { };
-            "Shift+Print".screenshot-screen = { };
+            "Print".spawn-sh = lib.getExe self'.packages.ScreenshotFull;
+            "Shift+Print".spawn-sh = lib.getExe self'.packages.ScreenshotRegion;
             "Alt+Print".screenshot-window = { };
             # Navigate between app columns on the horizontal strip
             "Mod+Left".focus-column-left = { };
