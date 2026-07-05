@@ -35,7 +35,7 @@
             "telemetry.telemetryLevel" = "off";
 
             # These two names must match the theme extensions added below.
-            "workbench.colorTheme" = "Dracula Theme"; # [verify: theme's display name]
+            "workbench.colorTheme" = "matugen"; # [verify: theme's display name]
             "workbench.iconTheme" = "material-icon-theme";
 
             # --- Nix language + formatting (jnoortheen.nix-ide) ---
@@ -72,6 +72,12 @@
               #   version = "0.47.2";
               #   sha256 = "0000000000000000000000000000000000000000000000000000";
               # }
+              {
+                name = "matugen-theme";
+                publisher = "haikalllp";
+                version = "1.0.2";
+                sha256 = pkgs.lib.fakeHash; # first build fails with the real hash — paste it in
+              }
             ];
         };
 

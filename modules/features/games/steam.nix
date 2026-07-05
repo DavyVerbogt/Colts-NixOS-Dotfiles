@@ -11,7 +11,9 @@
       nixpkgs.overlays = [
         inputs.millennium.overlays.default
       ];
-
+      systemd.user.tmpfiles.rules = [
+        "d %h/.local/share/millennium/themes 0755 - - -"
+      ];
       programs.steam = {
         enable = true;
         package = pkgs.millennium-steam;
@@ -21,6 +23,8 @@
         gamescopeSession.enable = false;
         extraCompatPackages = with pkgs; [
           proton-ge-bin
+          xdg-utils
+          thunar
         ];
       };
 
