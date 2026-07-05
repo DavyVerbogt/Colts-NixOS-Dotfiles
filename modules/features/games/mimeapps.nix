@@ -16,7 +16,6 @@
       inode/directory=thunar.desktop
       x-scheme-handler/nxm=amethyst.desktop
       x-scheme-handler/nxm-protocol=amethyst.desktop
-      x-scheme-handler/nxm=nexusmods-app.desktop
     '';
   };
 }
