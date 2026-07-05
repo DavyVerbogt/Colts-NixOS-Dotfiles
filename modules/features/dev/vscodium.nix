@@ -76,7 +76,7 @@
                 name = "matugen-theme";
                 publisher = "haikalllp";
                 version = "1.0.2";
-                sha256 = pkgs.lib.fakeHash; # first build fails with the real hash — paste it in
+                sha256 = "sha256-fy3+e8MT5hh619pNyBPdMIZGnBpl70TOtO0YSnnay/Y=";
               }
             ];
         };

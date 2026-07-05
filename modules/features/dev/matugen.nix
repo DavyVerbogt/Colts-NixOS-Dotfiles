@@ -7,11 +7,11 @@
       # also symlink a local ~/.config/matugen/templates/ copy.
       vscodeColorsTemplate = pkgs.fetchurl {
         url = "https://raw.githubusercontent.com/InioX/matugen-themes/main/templates/vscode-colors";
-        sha256 = pkgs.lib.fakeHash; # first build fails with the real hash, paste it in
+        sha256 = "sha256-lCdDr8HcVFx5y4TJtDb9ZgtP8dcUENqAF++3sxTDJVs="; # first build fails with the real hash, paste it in
       };
       vscodeColorsJsonTemplate = pkgs.fetchurl {
         url = "https://raw.githubusercontent.com/InioX/matugen-themes/main/templates/vscode-colors.json";
-        sha256 = pkgs.lib.fakeHash;
+        sha256 = "sha256-ct9gkHqsEb52OQXEuQqBNpdJdg80GtJ2UlhmT95BaaQ=";
       };
 
       matugenConfig = pkgs.writeText "matugen-config.toml" ''
