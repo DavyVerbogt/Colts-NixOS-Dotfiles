@@ -13,8 +13,8 @@
     { pkgs, ... }:
     let
       amethystAppImage = pkgs.fetchurl {
-        url = "https://github.com/ChrisDKN/Amethyst-Mod-Manager/releases/download/v1.3.12/AmethystModManager-1.3.12-x86_64.AppImage";
-        hash = "sha256-oCoLjiMLYqLtaqUK5FxT1HWgHmOIjTzO7JWTYKWwdB4=";
+        url = "https://github.com/ChrisDKN/Amethyst-Mod-Manager/releases/download/v1.3.13/AmethystModManager-1.3.13-x86_64.AppImage";
+        hash = "sha256-9s8f/18dRkFDkZQenXf0uRL8DpTLaoue7rEGgzp7PEo=";
       };
 
       amethyst = pkgs.writeShellScriptBin "amethyst-mod-manager" ''

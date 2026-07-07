@@ -1,17 +1,33 @@
+# modules/features/desktop/font-rendering.nix
 { ... }: {
-  flake.nixosModules.mimeDefaults = { pkgs, ... }: {
-    environment.etc."xdg/mimeapps.list".text = ''
-      [Default Applications]
-      inode/directory=thunar.desktop
-      x-scheme-handler/nxm=amethyst.desktop
-      x-scheme-handler/nxm-protocol=amethyst.desktop
-      x-scheme-handler/nxm=nexusmods-app.desktop
-    '';
-    system.activationScripts.userMimeDefaults = {
-      text = ''
-        ${pkgs.util-linux}/bin/runuser -u colt -- \
-          ${pkgs.xdg-utils}/bin/xdg-mime default thunar.desktop inode/directory
-      '';
+  flake.nixosModules.fonts = { pkgs, ... }: {
+    fonts = {
+      enableDefaultPackages = true; # baseline DejaVu/Liberation/Noto so nothing is glyphless
+      packages = with pkgs; [
+        noto-fonts
+        noto-fonts-cjk-sans
+        noto-fonts-color-emoji
+        liberation_ttf
+        dejavu_fonts
+      ];
+      fontconfig = {
+        enable = true;
+        defaultFonts = {
+          sansSerif = [
+            "Noto Sans"
+            "DejaVu Sans"
+          ];
+          serif = [
+            "Noto Serif"
+            "DejaVu Serif"
+          ];
+          monospace = [
+            "Liberation Mono"
+            "DejaVu Sans Mono"
+          ];
+          emoji = [ "Noto Color Emoji" ];
+        };
+      };
     };
   };
 }
