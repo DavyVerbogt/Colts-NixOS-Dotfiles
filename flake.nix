@@ -22,7 +22,7 @@
     };
     qylock.url = "github:Darkkal44/qylock";
 
-    amethyst-src = {
+    amethyst-mm = {
       url = "github:ChrisDKN/Amethyst-Mod-Manager/v2.0.0-beta.9";
       flake = false; # it's a source repo, not a flake
     };

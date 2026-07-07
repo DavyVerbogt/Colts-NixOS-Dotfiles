@@ -1,6 +1,6 @@
 {
   "nodes": {
-    "amethyst-src": {
+    "amethyst-mm": {
       "flake": false,
       "locked": {
         "lastModified": 1783416578,
@@ -376,7 +376,7 @@
     },
     "root": {
       "inputs": {
-        "amethyst-src": "amethyst-src",
+        "amethyst-mm": "amethyst-mm",
         "claude-desktop": "claude-desktop",
         "flake-parts": "flake-parts",
         "import-tree": "import-tree",
