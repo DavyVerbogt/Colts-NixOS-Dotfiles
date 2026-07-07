@@ -21,6 +21,11 @@
       flake = false; # it's not a flake, just files
     };
     qylock.url = "github:Darkkal44/qylock";
+
+    amethyst-src = {
+      url = "github:ChrisDKN/Amethyst-Mod-Manager/v2.0.0-beta.9";
+      flake = false; # it's a source repo, not a flake
+    };
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
