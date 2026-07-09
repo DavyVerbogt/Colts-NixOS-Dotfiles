@@ -8,13 +8,24 @@
       dev
       steam
       minecraft
+      psx
       nvidia
       spicetify
       vesktop
       zen
       amm
       bazecor
-      psx
+      bluetooth
+      blender
+      blockbench
+      godot
+      unity
+      vrcc
+      nerdFont
+      pipewireLatency
+      nixSettings
+      homeManagerBase
+      themeSwitch
       inputs.qylock.nixosModules.default
     ];
 

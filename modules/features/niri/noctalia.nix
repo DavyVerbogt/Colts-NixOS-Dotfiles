@@ -1,4 +1,4 @@
-{ inputs, ... }: {
+{ inputs, config, ... }: {
 
   perSystem = { pkgs, self', ... }: {
 
@@ -18,6 +18,17 @@
       inputs.wrapper-modules.wrappers.noctalia-shell.wrap {
         inherit pkgs;
         settings = jsonSettings // {
+          # predefinedScheme used to be hardcoded to "Gruvbox" straight in
+          # noctalia.json. Now driven by theme.profile via theming/core.nix
+          # + theming/profiles/*.nix — cyberpunk sets this to "" so
+          # useWallpaperColors' Material Gen drives it instead.
+          colorSchemes = jsonSettings.colorSchemes // {
+            predefinedScheme = config.theme.noctaliaPredefinedScheme;
+          };
+          ui = jsonSettings.ui // {
+            fontDefaultScale = config.desktop.fontScale;
+            fontFixedScale = config.desktop.fontScale;
+          };
           hooks = (jsonSettings.hooks or { }) // {
             enabled = true;
             darkModeChange = "${adwGtk3ThemeSwitch}";

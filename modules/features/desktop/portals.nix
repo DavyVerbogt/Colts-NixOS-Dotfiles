@@ -10,7 +10,16 @@
   # then freezes". desktop/gtk-settings.nix already installs
   # xdg-desktop-portal-gtk as a backend; this just tells the portal service
   # to actually use it as the default.
-  flake.nixosModules.portals = { ... }: {
-    xdg.portal.config.common.default = [ "gtk" ];
+  #
+  # ScreenCast is routed separately to xdg-desktop-portal-gnome: gtk's
+  # portal doesn't implement org.freedesktop.impl.portal.ScreenCast at all,
+  # so Discord/OBS/browser screen-share had no backend whatsoever under
+  # niri before this — test it before you need it mid-call, not during one.
+  flake.nixosModules.portals = { pkgs, ... }: {
+    xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
+    xdg.portal.config.common = {
+      default = [ "gtk" ];
+      "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
+    };
   };
 }

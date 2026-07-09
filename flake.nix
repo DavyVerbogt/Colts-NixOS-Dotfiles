@@ -22,6 +22,10 @@
     };
     qylock.url = "github:Darkkal44/qylock";
 
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     amethyst-mm = {
       url = "github:ChrisDKN/Amethyst-Mod-Manager/v2.0.0-beta.9";
       flake = false; # it's a source repo, not a flake

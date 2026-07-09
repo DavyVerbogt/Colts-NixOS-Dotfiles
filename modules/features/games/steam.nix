@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, config, ... }:
 {
   flake.nixosModules.steam =
     {
@@ -6,6 +6,13 @@
       lib,
       ...
     }:
+    let
+      # Every profile now defines a full palette (added when home/kitty.nix
+      # started reading these too), so MangoHud consistently follows
+      # theme.profile like everything else — the `or` fallback below only
+      # matters for a future profile that doesn't bother defining every key.
+      hex = name: default: lib.removePrefix "#" (config.theme.palette.${name} or default);
+    in
     {
 
       nixpkgs.overlays = [
@@ -102,21 +109,23 @@
         font_size = 24
         no_small_font = false
 
-        # --- Cyberpunk color palette ---
-        background_color = 0d0d1a
+        # --- Palette — sourced from theme.palette (theming/profiles/*.nix)
+        #     instead of hardcoded here, so it stays in sync with the rest
+        #     of the active theme.profile. ---
+        background_color = ${hex "void" "0d0d1a"}
         text_color       = dde4ff
 
-        fps_color_above_warn = 39ff14   # neon green  — good
-        fps_color_warn       = ff9500   # amber       — warn
-        fps_color            = ff3030   # red         — bad
+        fps_color_above_warn = ${hex "green" "39ff14"}
+        fps_color_warn       = ff9500
+        fps_color            = ff3030
 
-        gpu_color       = 00e5ff   # cyan
-        cpu_color       = ff2d55   # hot pink
-        vram_color      = bf5fff   # purple
-        ram_color       = 5b8af5   # electric blue
-        frametime_color = 00bfa5   # teal
-        engine_color    = 00e5ff   # cyan
-        wine_color      = ff7043   # orange (for Proton games)
+        gpu_color       = ${hex "cyan" "00e5ff"}
+        cpu_color       = ff2d55
+        vram_color      = ${hex "accent2" "bf5fff"}
+        ram_color       = 5b8af5
+        frametime_color = 00bfa5
+        engine_color    = ${hex "cyan" "00e5ff"}
+        wine_color      = ff7043
 
         # --- Style ---
         background_alpha = 0.85

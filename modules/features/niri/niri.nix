@@ -21,6 +21,7 @@
       environment = {
         systemPackages = [
           pkgs.banana-cursor
+          pkgs.hyprpicker
           inputs.niri-session-manager.packages.${pkgs.stdenv.hostPlatform.system}.default
         ];
         sessionVariables = lib.mkIf config.hardware.nvidia.modesetting.enable {
@@ -42,6 +43,17 @@
       self',
       ...
     }:
+    let
+      cyberpunk = config.theme.profile == "cyberpunk";
+
+      # Fill these in from `niri msg windows` on ws01-nix — app-ids that
+      # should stay fully opaque (opacity 1.0) despite the global 0.90
+      # below. Empty list = no exclusions, i.e. today's behavior.
+      opaqueAppIds = [
+        # "^steam$"
+        # "^org\\.prismlauncher\\.PrismLauncher$"
+      ];
+    in
     {
       packages.NiriConf = inputs.wrapper-modules.wrappers.niri.wrap {
         inherit pkgs;
@@ -58,7 +70,16 @@
 
           xwayland-satellite.path = lib.getExe pkgs.xwayland-satellite;
 
-          input.keyboard.xkb.layout = "us,ua";
+          input = {
+            keyboard.xkb.layout = "us,ua";
+            # Per-device tuning from desktop/input.nix — flat/precise for
+            # ws01-nix's real mouse today; a laptop host would read
+            # "adaptive" here automatically via device.class.
+            mouse = {
+              accel-profile = config.desktop.mouse.accelProfile;
+              accel-speed = config.desktop.mouse.accelSpeed;
+            };
+          };
 
           layout = {
             gaps = 8;
@@ -67,8 +88,10 @@
               width = 2;
               active-gradient = _: {
                 props = {
-                  from = "#ff0080";
-                  to = "#bf00ff";
+                  # Sourced from theme.palette (theming/profiles/*.nix)
+                  # instead of hardcoded, with the original hex as fallback.
+                  from = config.theme.palette.accent or "#ff0080";
+                  to = config.theme.palette.accent2 or "#bf00ff";
                   angle = 45;
                   relative-to = "workspace-view";
                 };
@@ -76,7 +99,13 @@
               inactive-color = "#2a2a2a";
             };
           };
-          animations = {
+
+          # Gated behind theme.profile so minimal/productivity get niri's
+          # plain default animations instead of the cyberpunk glitch shader.
+          # lib.optionalAttrs (not lib.mkIf!) because this whole `settings`
+          # tree is plain data handed to wrapper-modules, not NixOS module
+          # config — lib.mkIf's marker value would leak through unresolved.
+          animations = lib.optionalAttrs cyberpunk {
             window-open = {
               duration-ms = 500;
               curve = "linear";
@@ -177,40 +206,22 @@
               '';
             };
           };
+
           window-rules = [
             {
               geometry-corner-radius = 12;
               clip-to-geometry = true;
               opacity = 0.90;
             }
+          ]
+          ++ lib.optional (opaqueAppIds != [ ]) {
+            matches = map (id: { app-id = id; }) opaqueAppIds;
+            opacity = 1.0;
+          }
+          ++ [
             {
               background-effect.blur = true;
               draw-border-with-background = false;
-            }
-            {
-              # Picture-in-Picture (Zen/Firefox-based browsers). Force it floating,
-              # pin it to a corner, and keep it fully opaque — overrides the global
-              # opacity=0.90 rule above since this rule matches and is declared later.
-
-              matches = [
-                { title = "^Picture-in-Picture$"; }
-              ];
-              open-floating = true;
-              opacity = 0.7;
-              background-effect.blur = false;
-              default-floating-position = _: {
-                props = {
-                  x = 32;
-                  y = 32;
-                  relative-to = "bottom-right";
-                };
-              };
-              default-column-width = {
-                fixed = 480;
-              };
-              default-window-height = {
-                fixed = 270;
-              };
             }
           ];
 
@@ -232,6 +243,8 @@
             "Print".spawn-sh = lib.getExe self'.packages.ScreenshotFull;
             "Shift+Print".spawn-sh = lib.getExe self'.packages.ScreenshotRegion;
             "Alt+Print".screenshot-window = { };
+            "Mod+Shift+C".spawn-sh = "${lib.getExe pkgs.hyprpicker} -a"; # copy hex under cursor to clipboard
+
             # Navigate between app columns on the horizontal strip
             "Mod+Left".focus-column-left = { };
             "Mod+Right".focus-column-right = { };
