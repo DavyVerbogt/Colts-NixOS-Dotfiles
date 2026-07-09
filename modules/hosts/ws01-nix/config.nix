@@ -14,6 +14,7 @@
       zen
       amm
       bazecor
+      psx
       inputs.qylock.nixosModules.default
     ];
 

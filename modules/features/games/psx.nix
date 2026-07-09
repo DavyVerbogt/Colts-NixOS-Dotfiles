@@ -1,8 +1,10 @@
 { ... }:
 {
   flake.nixosModules.psx = { pkgs, ... }: {
-    environment.systemPackages = [
-      pkgs.pcsx2-bin
+    environment.systemPackages = with pkgs; [
+      pcsx2
+      mymcplus
+      vita3k
     ];
   };
 }
