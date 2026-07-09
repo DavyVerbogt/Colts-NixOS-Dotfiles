@@ -213,6 +213,26 @@
               clip-to-geometry = true;
               opacity = 0.90;
             }
+            {
+              matches = [
+                { title = "^Picture-in-Picture$"; }
+              ];
+              open-floating = true;
+              opacity = 1.0;
+              default-floating-position = _: {
+                props = {
+                  x = 32;
+                  y = 32;
+                  relative-to = "bottom-right";
+                };
+              };
+              default-column-width = {
+                fixed = 480;
+              };
+              default-window-height = {
+                fixed = 270;
+              };
+            }
           ]
           ++ lib.optional (opaqueAppIds != [ ]) {
             matches = map (id: { app-id = id; }) opaqueAppIds;

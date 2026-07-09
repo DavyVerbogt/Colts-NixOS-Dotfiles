@@ -8,13 +8,13 @@
   # forcing XWayland via GDK_BACKEND=x11 is the documented workaround,
   # wrapped the same way games/minecraft.nix already wraps prismlauncher
   # with makeWrapper for its own Wayland-related env fix.
-  flake.nixosModules.vrcc = { pkgs, ... }: {
+  flake.nixosModules.vrcc = { pkgs, lib, ... }: {
     environment.systemPackages = [
       (pkgs.runCommand "alcom-wrapped"
         { nativeBuildInputs = [ pkgs.makeWrapper ]; }
         ''
           mkdir -p $out/bin
-          makeWrapper ${pkgs.alcom}/bin/alcom $out/bin/alcom \
+          makeWrapper ${lib.getExe pkgs.alcom} $out/bin/alcom \
             --set GDK_BACKEND x11
         ''
       )

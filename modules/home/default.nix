@@ -16,7 +16,7 @@
     description = "Home Manager modules exposed by this flake, keyed by name.";
   };
 
-  flake.nixosModules.homeManagerBase = { pkgs, ... }: {
+  config.flake.nixosModules.homeManagerBase = { pkgs, ... }: {
     imports = [ inputs.home-manager.nixosModules.home-manager ];
     home-manager = {
       useGlobalPkgs = true;

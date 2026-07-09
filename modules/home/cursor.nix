@@ -13,6 +13,7 @@
   # mechanism fully reproduces it. This module is additive on top of it.
   flake.homeManagerModules.cursor = { pkgs, ... }: {
     home.pointerCursor = {
+      enable = true;
       name = config.desktop.cursorTheme;
       size = config.desktop.cursorSize;
       package = pkgs.banana-cursor;

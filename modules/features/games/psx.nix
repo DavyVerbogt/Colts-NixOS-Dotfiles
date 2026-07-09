@@ -4,7 +4,6 @@
     environment.systemPackages = with pkgs; [
       pcsx2
       mymcplus
-      vita3k
     ];
   };
 }
