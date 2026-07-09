@@ -187,6 +187,31 @@
               background-effect.blur = true;
               draw-border-with-background = false;
             }
+            {
+              # Picture-in-Picture (Zen/Firefox-based browsers). Force it floating,
+              # pin it to a corner, and keep it fully opaque — overrides the global
+              # opacity=0.90 rule above since this rule matches and is declared later.
+
+              matches = [
+                { title = "^Picture-in-Picture$"; }
+              ];
+              open-floating = true;
+              opacity = 0.7;
+              background-effect.blur = false;
+              default-floating-position = _: {
+                props = {
+                  x = 32;
+                  y = 32;
+                  relative-to = "bottom-right";
+                };
+              };
+              default-column-width = {
+                fixed = 480;
+              };
+              default-window-height = {
+                fixed = 270;
+              };
+            }
           ];
 
           binds = {
