@@ -26,10 +26,20 @@
   # system-level environment.systemPackages install (same store path,
   # deduplicated by Nix, not two real copies). That file still owns
   # $TERMINAL and the system-wide install; this one only owns the theme.
-  flake.homeManagerModules.kitty = { ... }: {
+  flake.homeManagerModules.kitty = { lib, ... }: {
     programs.kitty = {
       enable = true;
       settings = {
+        # Background-only transparency from the active theme
+        # (theme.current.terminalOpacity) — kitty fades just the background,
+        # text stays crisp, which is why the terminal is deliberately NOT in
+        # the theme's niri.appOpacity window rules. floatToString (toJSON
+        # under the hood) renders "0.85", not toString's "0.850000".
+        # dynamic_background_opacity lets kitty's Ctrl+Shift+A+m/l adjust
+        # it live without a rebuild.
+        background_opacity = lib.strings.floatToString (config.theme.current.terminalOpacity or 1.0);
+        dynamic_background_opacity = true;
+
         background = config.theme.palette.void or "#0d0d1a";
         foreground = config.theme.palette.foreground or "#dde4ff";
         cursor = config.theme.palette.accent or "#ff0080";

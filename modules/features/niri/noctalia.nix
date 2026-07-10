@@ -19,11 +19,20 @@
         inherit pkgs;
         settings = jsonSettings // {
           # predefinedScheme used to be hardcoded to "Gruvbox" straight in
-          # noctalia.json. Now driven by theme.profile via theming/core.nix
-          # + theming/profiles/*.nix — cyberpunk sets this to "" so
+          # noctalia.json. Now driven by theme.active via theming/core.nix
+          # + theming/themes/*.nix — cyberpunk sets this to "" so
           # useWallpaperColors' Material Gen drives it instead.
           colorSchemes = jsonSettings.colorSchemes // {
             predefinedScheme = config.theme.noctaliaPredefinedScheme;
+            darkMode = config.theme.current.darkMode;
+          };
+          # Wallpaper pool is now per-theme: <wallpapersBase>/<wallpaperDir>
+          # instead of the single flat folder noctalia.json hardcoded. The
+          # rest of the wallpaper block (random rotation every 300s, fade
+          # transitions, crop fill) stays as configured in noctalia.json.
+          wallpaper = jsonSettings.wallpaper // {
+            directory = "${config.theme.wallpapersBase}/${config.theme.current.wallpaperDir}";
+            fillColor = config.theme.current.fillColor;
           };
           ui = jsonSettings.ui // {
             fontDefaultScale = config.desktop.fontScale;

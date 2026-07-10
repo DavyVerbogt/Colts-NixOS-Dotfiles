@@ -1,4 +1,4 @@
-{ inputs, ... }: {
+{ inputs, config, ... }: {
 
   flake.nixosModules.spicetify =
     { pkgs, lib, ... }:
@@ -16,7 +16,13 @@
 
       programs.spicetify = {
         enable = true;
-        theme = spicePkgs.themes.comfy;
+        # "text" theme (was comfy), with its color scheme driven by the
+        # active theme's spicetifyColorScheme (theming/themes/*.nix) —
+        # TokyoNight/Gruvbox/Nord for cyberpunk/minimal/productivity.
+        # Valid names = the [sections] of the text theme's color.ini.
+        theme = spicePkgs.themes.text;
+        colorScheme = lib.mkIf (config.theme.current.spicetifyColorScheme != "")
+          config.theme.current.spicetifyColorScheme;
 
         enabledExtensions = with spicePkgs.extensions; [
           adblock

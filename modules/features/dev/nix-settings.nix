@@ -1,6 +1,10 @@
 { ... }: {
   flake.nixosModules.nixSettings = { ... }: {
     nix.settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
       substituters = [
         "https://cache.nixos.org"
         "https://nix-community.cachix.org"
@@ -17,5 +21,7 @@
       dates = "weekly";
       options = "--delete-older-than 14d";
     };
+
+    nixpkgs.config.allowUnfree = true;
   };
 }

@@ -44,10 +44,13 @@
       ...
     }:
     let
-      cyberpunk = config.theme.profile == "cyberpunk";
+      # All visual knobs come from the active theme (theming/core.nix +
+      # theming/themes/*.nix): gaps, corner radius, opacity, inactive
+      # border color, and whether the glitch shaders are on.
+      th = config.theme.current;
 
       # Fill these in from `niri msg windows` on ws01-nix — app-ids that
-      # should stay fully opaque (opacity 1.0) despite the global 0.90
+      # should stay fully opaque (opacity 1.0) despite the global opacity
       # below. Empty list = no exclusions, i.e. today's behavior.
       opaqueAppIds = [
         # "^steam$"
@@ -82,13 +85,13 @@
           };
 
           layout = {
-            gaps = 8;
+            gaps = th.niri.gaps;
 
             focus-ring = {
               width = 2;
               active-gradient = _: {
                 props = {
-                  # Sourced from theme.palette (theming/profiles/*.nix)
+                  # Sourced from theme.palette (theming/themes/*.nix)
                   # instead of hardcoded, with the original hex as fallback.
                   from = config.theme.palette.accent or "#ff0080";
                   to = config.theme.palette.accent2 or "#bf00ff";
@@ -96,16 +99,16 @@
                   relative-to = "workspace-view";
                 };
               };
-              inactive-color = "#2a2a2a";
+              inactive-color = th.niri.inactiveColor;
             };
           };
 
-          # Gated behind theme.profile so minimal/productivity get niri's
-          # plain default animations instead of the cyberpunk glitch shader.
+          # Gated behind the theme's niri.glitchShader flag so themes that
+          # turn it off get niri's plain default animations instead.
           # lib.optionalAttrs (not lib.mkIf!) because this whole `settings`
           # tree is plain data handed to wrapper-modules, not NixOS module
           # config — lib.mkIf's marker value would leak through unresolved.
-          animations = lib.optionalAttrs cyberpunk {
+          animations = lib.optionalAttrs th.niri.glitchShader {
             window-open = {
               duration-ms = 500;
               curve = "linear";
@@ -207,18 +210,24 @@
             };
           };
 
+          # Rule order matters: niri merges matching rules with later ones
+          # winning, so the per-app opacity rules (from the theme's
+          # niri.appOpacity) come after the global default, and the manual
+          # opaqueAppIds escape hatch stays last.
           window-rules = [
             {
-              geometry-corner-radius = 12;
+              geometry-corner-radius = th.niri.cornerRadius;
               clip-to-geometry = true;
-              opacity = 0.90;
+              opacity = th.niri.windowOpacity;
             }
             {
               matches = [
                 { title = "^Picture-in-Picture$"; }
               ];
               open-floating = true;
-              opacity = 1.0;
+              # opacity + blur for PiP live in the dedicated rule appended
+              # AFTER the blur-all rule below — later rules win, so setting
+              # them here would just get overridden.
               default-floating-position = _: {
                 props = {
                   x = 32;
@@ -234,6 +243,10 @@
               };
             }
           ]
+          ++ lib.mapAttrsToList (regex: op: {
+            matches = [ { app-id = regex; } ];
+            opacity = op;
+          }) th.niri.appOpacity
           ++ lib.optional (opaqueAppIds != [ ]) {
             matches = map (id: { app-id = id; }) opaqueAppIds;
             opacity = 1.0;
@@ -242,6 +255,17 @@
             {
               background-effect.blur = true;
               draw-border-with-background = false;
+            }
+            # PiP last so it beats both the appOpacity rules and the
+            # blur-all rule above: translucent per the theme's pipOpacity,
+            # and never frosted — you want to see the video, not a blur of
+            # whatever's behind it.
+            {
+              matches = [
+                { title = "^Picture-in-Picture$"; }
+              ];
+              opacity = th.niri.pipOpacity;
+              background-effect.blur = false;
             }
           ];
 
