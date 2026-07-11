@@ -61,7 +61,7 @@
         "^(faugus-launcher|faugus)$" = 0.90; # Faugus Launcher
       };
       pipOpacity = 0.90; # PiP translucent, blur forced off in its rule
-      glitchShader = true; # the glitch open/close shaders are this theme's signature
+      shader = "glitch-cyberpunk"; # this theme's signature effect — same GLSL the old glitchShader bool hardcoded
     };
 
     palette = {

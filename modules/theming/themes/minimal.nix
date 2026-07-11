@@ -45,7 +45,7 @@
         "^(faugus-launcher|faugus)$" = 0.95;
       };
       pipOpacity = 0.95;
-      glitchShader = false;
+      shader = "none"; # stock niri animations; any niri.shaders name works here (e.g. "fold-window", "unravel")
     };
 
     palette = {

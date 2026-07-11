@@ -36,7 +36,7 @@
       windowOpacity = 1.0; # fully opaque — text legibility over style
       appOpacity = { }; # no translucent apps in work mode
       pipOpacity = 1.0; # opaque PiP too (blur still forced off by its rule)
-      glitchShader = false;
+      shader = "none"; # stock niri animations; any niri.shaders name works here (e.g. "swipe-window", "pop-drop")
     };
 
     palette = {

@@ -150,10 +150,20 @@ let
               through cleanly instead of frosted.
             '';
           };
-          glitchShader = lib.mkOption {
-            type = lib.types.bool;
-            default = false;
-            description = "Enable the cyberpunk glitch open/close shaders. Off = niri's stock animations.";
+          shader = lib.mkOption {
+            type = lib.types.str;
+            default = "none";
+            description = ''
+              Which niri window open/close animation shader this theme uses.
+              Valid names are the keys of the niri.shaders registry
+              (features/niri/shaders.nix, extracted from inputs.nirimation):
+              none, bloom, burn, burn-ashes, burn-multicolor, explode,
+              fold-window, glitch, glitch-cyberpunk, halftone, pixelate,
+              pop-drop, ribbons, roll-drop, swipe-window, unravel.
+              "none" = niri's stock animations. A custom effect is just a
+              new entry in that registry. (Replaces the old glitchShader
+              bool, which could only toggle the one hardcoded shader.)
+            '';
           };
         };
       };
