@@ -68,6 +68,7 @@
         # Proton/Wine
         protonup-qt
         winetricks
+        protontricks
 
         # Tools
         gamemode
