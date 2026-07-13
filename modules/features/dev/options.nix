@@ -9,6 +9,7 @@
       self.nixosModules.claude
       self.nixosModules.shell
       self.nixosModules.matugen
+      self.nixosModules.nix-ld
     ];
   };
 }
