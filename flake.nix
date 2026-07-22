@@ -30,6 +30,10 @@
       url = "github:ChrisDKN/Amethyst-Mod-Manager/v2.0.0-beta.9";
       flake = false; # it's a source repo, not a flake
     };
+    claude-cowork-service = {
+      url = "github:patrickjaja/claude-cowork-service";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);

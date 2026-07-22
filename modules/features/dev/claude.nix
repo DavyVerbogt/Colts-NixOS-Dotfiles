@@ -27,6 +27,7 @@
   # group grants /dev/kvm access. First VM start downloads a workspace
   # image (~25 GB free disk recommended, 8 GB RAM minimum).
   flake.nixosModules.claude = { pkgs, ... }: {
+    imports = with self.nixosModules; [ cowork ];
     environment.systemPackages = [
       inputs.claude-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
       pkgs.virtiofsd # /run/current-system/sw/bin/virtiofsd — probed by the Cowork VM launcher

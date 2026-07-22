@@ -3,7 +3,8 @@
     programs.fish = {
       enable = true;
       shellAliases = {
-        rebuild = "sudo nixos-rebuild switch --flake ~/Documents/NixOS#ws01-nix";
+        rebuild-ws = "sudo nixos-rebuild switch --flake ~/Documents/NixOS#ws01-nix";
+        rebuild-mbd = "sudo nixos-rebuild switch --flake ~/Documents/NixOS#ws01-nix";
         update = "nix flake update --flake ~/Documents/NixOS";
         gc = "sudo nix-collect-garbage -d";
         ls = "eza --icons";

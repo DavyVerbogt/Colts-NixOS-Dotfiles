@@ -69,6 +69,7 @@
         protonup-qt
         winetricks
         protontricks
+        protonplus
 
         # Tools
         gamemode
