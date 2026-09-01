@@ -23,23 +23,27 @@
         runtimeInputs = [ pkgs.gnugrep ];
         text = ''
           shopt -s nullglob
-          fhs="${pkgs.unityhub.fhsEnv}/bin/unityhub-fhs-env"
+                   fhs="${pkgs.unityhub.fhsEnv}/bin/unityhub-fhs-env"
 
-          for editor in "$HOME"/Unity/Hub/Editor/*/Editor; do
-            [ -x "$editor/Unity" ] || continue
-            if grep -q nix-unity-fhs-wrapper "$editor/Unity" 2>/dev/null; then
-              continue
-            fi
+                   for editor in "$HOME"/Unity/Hub/Editor/*/Editor; do
+                     [ -x "$editor/Unity" ] || continue
+                     if grep -q nix-unity-fhs-wrapper "$editor/Unity" 2>/dev/null; then
+                       continue
+                     fi
 
-            mv "$editor/Unity" "$editor/Unity.real"
-            cat > "$editor/Unity" <<EOF
-          #!/bin/sh
-          # nix-unity-fhs-wrapper
-          exec -a "$editor/Unity.real" "$fhs" "$editor/Unity.real" "\$@"
-          EOF
-            chmod 755 "$editor/Unity"
-            echo "wrapped $editor/Unity"
-          done
+                     mv "$editor/Unity" "$editor/Unity.real"
+
+           
+                     printf '%s\n' \
+                       '#!/bin/sh' \
+                       '# nix-unity-fhs-wrapper' \
+                       'export LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver/lib32' \
+                       "exec -a \"$editor/Unity.real\" \"$fhs\" \"$editor/Unity.real\" \"\$@\"" \
+                       > "$editor/Unity"
+
+                     chmod 755 "$editor/Unity"
+                     echo "wrapped $editor/Unity"
+                   done
         '';
       };
     in
