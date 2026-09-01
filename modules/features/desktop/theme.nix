@@ -12,7 +12,6 @@
 
   config.flake.nixosModules.gtkTheme = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
-      sweet # GTK2/3/4 theme — provides Sweet and Sweet-Dark variants (manual fallback)
       adw-gtk3 # active theme; Noctalia's color template targets this
     ];
   };
