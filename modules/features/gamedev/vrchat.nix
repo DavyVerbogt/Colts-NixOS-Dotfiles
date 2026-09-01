@@ -82,8 +82,31 @@
             case "$known" in
               *"$url"*) continue ;;
             esac
-            # Non-fatal: one unreachable listing must not fail the unit.
             vrc-get repo add "$url" || echo "could not add $url" >&2
+                        printf '%s\n' \
+              '#!/bin/sh' \
+              '# nix-unity-fhs-wrapper' \
+              'export LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver/lib32' \
+              'export XDG_DATA_DIRS=/run/opengl-driver/share:''${XDG_DATA_DIRS}' \
+              'export VK_DRIVER_FILES=/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.json' \
+              'unset GIO_MODULE_DIR GDK_PIXBUF_MODULE_FILE GSETTINGS_SCHEMA_DIR GTK_PATH' \
+              "exec -a \"$editor/Unity.real\" \"$fhs\" \"$editor/Unity.real\" \"\$@\"" \
+              > "$editor/Unity"            # shellcheck disable=SC2016 -- ${XDG_DATA_DIRS} must reach the
+            # generated wrapper unexpanded; it's evaluated when Unity launches.
+            # shellcheck disable=SC2016
+            # shellcheck disable=SC2016 -- the XDG_DATA_DIRS expansion must
+            # reach the generated wrapper unexpanded; it is evaluated when
+            # Unity launches, not when this script runs.
+            # shellcheck disable=SC2016
+            printf '%s\n' \
+              '#!/bin/sh' \
+              '# nix-unity-fhs-wrapper' \
+              'export LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver/lib32' \
+              'export XDG_DATA_DIRS=/run/opengl-driver/share:''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}' \
+              'export VK_DRIVER_FILES=/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.json' \
+              'unset GIO_MODULE_DIR GDK_PIXBUF_MODULE_FILE GSETTINGS_SCHEMA_DIR GTK_PATH' \
+              "exec -a \"$editor/Unity.real\" \"$fhs\" \"$editor/Unity.real\" \"\$@\"" \
+              > "$editor/Unity"
           done
         '';
       };
