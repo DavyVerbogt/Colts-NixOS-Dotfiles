@@ -51,9 +51,26 @@
         };
       };
 
-      # Gamescope compositor
+      # Gamescope compositor.
+      #
+      # Enabled as the workaround for xwayland-satellite #201: on this host,
+      # a niri workspace switch or an in-game map load freezes EVERY XWayland
+      # client at once (Steam, Spotify and the game all report xwayland-
+      # satellite's PID in `niri msg windows`; the apps stay alive, only the
+      # displayed frame goes stale). Gamescope nests its own micro-compositor,
+      # so a game run under it presents to niri as a single NATIVE Wayland
+      # surface and never routes through xwayland-satellite at all.
+      #
+      # Per-game opt-in via Steam launch options, e.g.:
+      #   gamescope -f -W 1920 -H 1080 -r 120 -- %command%
+      # niri/gaming.nix already has an `^gamescope$` app-id rule, so the
+      # resulting window gets the same fullscreen/no-blur/VRR treatment as a
+      # bare steam_app_<id> window.
+      #
+      # capSysNice lets gamescope raise its own scheduling priority, which
+      # matters on the proprietary NVIDIA driver.
       programs.gamescope = {
-        enable = false;
+        enable = true;
         capSysNice = true;
       };
 

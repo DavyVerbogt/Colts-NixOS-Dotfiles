@@ -96,6 +96,13 @@
             };
           };
 
+          # Xreal One AR glasses, connected via HDMI-A-1. Forces the
+          # panel to its 1920x1080@120 mode instead of whatever niri
+          # would otherwise negotiate/default to.
+          outputs."HDMI-A-1" = {
+            mode = "2540x1080@120";
+            scale = 1.25;
+          };
           layout = {
             gaps = th.niri.gaps;
 

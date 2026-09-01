@@ -87,8 +87,12 @@
               if (cmanifest.exists()) {
                 Components.manager.QueryInterface(Ci.nsIComponentRegistrar).autoRegister(cmanifest);
                 ChromeUtils.importESModule("chrome://userscripts/content/sine.sys.mjs");
+              } else {
+                Components.utils.reportError("[sine-debug] chrome.manifest not found at: " + cmanifest.path);
               }
-            } catch (err) {}
+            } catch (err) {
+              Components.utils.reportError("[sine-debug] Sine failed to load: " + err + "\n" + (err && err.stack));
+            }
           }
         '';
 
@@ -103,6 +107,26 @@
               );
 
               extraPrefsFiles = [ sineBootloaderConfig ];
+
+              # general.config.sandbox_enabled=false has to land in
+              # defaults/pref/autoconfig.js specifically — extraPrefs/
+              # extraPrefsFiles can't reach that file, only mozilla.cfg (open
+              # nixpkgs issue #299595). Without it, Sine's own try/catch
+              # above silently swallows the sandbox violation — no error,
+              # nothing loads.
+              #
+              # wrapFirefox has a built-in extraAutoConfig argument for
+              # exactly this (writes straight into autoconfig.js as part of
+              # its normal build: see pkgs/applications/networking/browsers/
+              # firefox/wrapper.nix). Use that instead of copying and
+              # hand-patching the built derivation after the fact — a prior
+              # version of this file did that via cp -rL + sed, which broke
+              # in two different ways (a stale exec path in the makeWrapper
+              # launcher script, then omni.ja corruption from an overly
+              # broad sed sweep) before landing on this simpler fix.
+              extraAutoConfig = ''
+                pref("general.config.sandbox_enabled", false);
+              '';
 
               extraPolicies = {
                 DisableTelemetry = true;
@@ -127,32 +151,7 @@
               };
             };
       in
-      # --- Sine — sandbox pref post-processing --------------------------
-      # general.config.sandbox_enabled=false has to land in
-      # defaults/pref/autoconfig.js specifically — extraPrefs/extraPrefsFiles
-      # can't reach that file, only mozilla.cfg (open nixpkgs issue #299595).
-      # Without it, Sine's own try/catch above silently swallows the sandbox
-      # violation — no error, nothing loads.
-      #
-      # lndir mirrors the wrapped derivation as per-file symlinks (so this
-      # doesn't need to know wrapFirefox's internal libName), then
-      # autoconfig.js is deleted and rewritten for real.
-      pkgs.runCommand "zen-browser-sine-ready" { nativeBuildInputs = [ pkgs.xorg.lndir ]; } ''
-        mkdir -p $out
-        lndir -silent ${zenWrapped} $out
-
-        autoconfig_js=$(find -L $out/lib -maxdepth 4 -name autoconfig.js | head -n1)
-        if [ -z "$autoconfig_js" ]; then
-          echo "ERROR: couldn't locate autoconfig.js under $out/lib" >&2
-          exit 1
-        fi
-        rm "$autoconfig_js"
-        cat > "$autoconfig_js" <<'EOF'
-        pref("general.config.filename", "mozilla.cfg");
-        pref("general.config.obscure_value", 0);
-        pref("general.config.sandbox_enabled", false);
-        EOF
-      '';
+      zenWrapped;
 
     # --- Sine — profile-side chrome files ---------------------------------
     # Fetched, pinned Sine assets — see zen.nix's sineBootstrapScript above

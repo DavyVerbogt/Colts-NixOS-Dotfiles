@@ -16,8 +16,10 @@
   #   - native helpers it shells out to (7z, bsdtar, zenity) are on PATH
   #   - qt6 wayland + imageformats (WebP thumbnails) via wrapQtAppsHook
   #
-  # Source is a flake input pinned to a release tag (flake.nix: amethyst-mm),
-  # so `nix flake update amethyst-mm` is what bumps the version — reproducible.
+  # Source is a flake input pinned to a commit rev (flake.nix: amethyst-mm) —
+  # NOT a tag: upstream deletes/re-points its beta tags, which breaks
+  # `nix flake update`. Bumping the version means editing that rev in flake.nix.
+  # `version` below is still read out of the source, so it follows automatically.
   #
   # Imported in hosts/ws01-nix/config.nix as: self.nixosModules.amm
 

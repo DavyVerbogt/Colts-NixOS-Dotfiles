@@ -27,7 +27,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     amethyst-mm = {
-      url = "github:ChrisDKN/Amethyst-Mod-Manager/v2.0.0-beta.9";
+      # Pinned by commit, not by tag. Upstream deletes/re-points its beta tags
+      # (v2.0.0-beta.9 vanished, breaking `nix flake update` with a GitHub 422),
+      # and a tag is a mutable ref so it was never a real pin. A rev is immutable
+      # and GitHub still serves archive/<sha>.tar.gz for unreferenced commits.
+      # Bump = edit this rev; `nix flake update` is a no-op for this input.
+      url = "github:ChrisDKN/Amethyst-Mod-Manager/9727e79c3326abb3724c7db7b08d855e9e937b8d"; # was tag v2.0.0-beta.9
       flake = false; # it's a source repo, not a flake
     };
     claude-cowork-service = {

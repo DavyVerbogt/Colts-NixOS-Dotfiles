@@ -41,6 +41,7 @@
       spicetify
       vesktop
       zen
+      webapps
 
       # peripherals
       bazecor
